@@ -52,3 +52,6 @@ if [ "${merge_to_pdf}" -eq 1 ]; then
 fi
 
 notify-send --icon=$notification_icon Scan "Scan terminé: ${output_filename}" --expire-time=60000 --urgency=normal
+
+# open directory
+xdg-open $output_dir
