@@ -19,11 +19,14 @@ resolution=300
 jpg_quality=80 # %
 merge_to_pdf=0 # 1 to enable
 output_dir=$HOME/brscan
-output_file=$output_dir/scan_`date +%Y-%m-%d-%H-%M-%S`
-
+output_filename=scan_`date +%Y-%m-%d-%H-%M-%S`
+output_file=$output_dir/$output_filename
+notification_icon=/usr/share/icons/gnome/256x256/devices/scanner.png
 
 mkdir -p $output_dir
 echo scanning from $friendly_name to $output_file
+
+notify-send --icon=$notification_icon Scan "Scan en cours..." --expire-time=60000 --urgency=low
 
 sleep 0.5
 scanimage --device-name "$device" --resolution $resolution --batch=$output_file-%d.pnm
@@ -47,3 +50,5 @@ if [ "${merge_to_pdf}" -eq 1 ]; then
  convert ${output_file}-*.jpg $output_file_merged
  echo  $output_file_merged scanned from $friendly_name
 fi
+
+notify-send --icon=$notification_icon Scan "Scan terminé: ${output_filename}" --expire-time=60000 --urgency=normal
