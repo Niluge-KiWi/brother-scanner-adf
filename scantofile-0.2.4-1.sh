@@ -16,8 +16,10 @@ device=$1
 friendly_name=$2
 
 resolution=300 # dpi
-jpg_quality=80 # %
-merge_to_pdf=1 # bool; 1 to enable; 0 to disable
+jpg_quality=90 # %
+merge_to_pdf=0 # bool; 1 to enable; 0 to disable
+ocr_to_pdf=1 # bool; 1 to enable; 0 to disable
+ocr_lang=fra # see `tesseract --list-langs`
 output_dir=$HOME/brscan
 output_filename=scan_`date +%Y-%m-%d-%H-%M-%S`
 output_file=$output_dir/$output_filename
@@ -44,12 +46,20 @@ done
 rm ${output_file}-*.pnm
 echo  ${output_file}-*.jpg scanned from $friendly_name
 
-# merge to pdf if multiple pages scanned
-if [ "${merge_to_pdf}" -eq 1 -a -f ${output_file}-2.jpg ]; then
+# merge to pdf # if multiple pages scanned
+if [ "${merge_to_pdf}" -eq 1 ]; then  # -a -f ${output_file}-2.jpg ]; then
  output_file_merged=${output_file}.pdf
  convert ${output_file}-*.jpg $output_file_merged
  echo  $output_file_merged scanned from $friendly_name
 fi
+
+# OCR and merge to pdf # if multiple pages scanned
+if [ "${ocr_to_pdf}" -eq 1 ]; then  # -a -f ${output_file}-2.jpg ]; then
+ output_file_merged=${output_file}.pdf
+ ls ${output_file}-*.jpg | tesseract -l $ocr_lang - - pdf >  $output_file_merged
+ echo  $output_file_merged scanned with OCR from $friendly_name
+fi
+
 
 notify-send --icon=$notification_icon Scan "Scan terminé: ${output_filename}" --expire-time=60000 --urgency=normal
 

@@ -1,6 +1,6 @@
 Brother network scanner script for linux, with support for ADF (automatic document feeder), generating jpgs and merged pdf.
 
-Tested on Brother MFC-J825DW with ubuntu 16.04.
+Tested on Brother MFC-J825DW, MFC-J6945DW on ubuntu 18.04.
 
 # Setup
 - Get `scantofile-0.2.4-1.sh` from this git repo
